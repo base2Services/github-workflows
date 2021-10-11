@@ -1,10 +1,16 @@
-name: Container Build
+name: Container Image Build
 
 on:
   workflow_call:
     inputs:
-      image_name:
+      image-name:
         required: true
+        type: string
+      image-version:
+        required: true
+        type: string
+      build-args:
+        required: false
         type: string
 
 jobs:
@@ -25,22 +31,15 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Source Version Environment File
-      run: |
-        while IFS="" read -r p || [ -n "$p" ]
-        do
-         echo "$p" >> $GITHUB_ENV
-        done <${{ inputs.image_name }}/version
-
-    - name: Build and push Container Image to GitHub Container Repository
+    - name: Build and Push Container Image to GitHub Container Repository
       uses: docker/build-push-action@v2
       with:
         context: ./${{ inputs.image_name }}
         # push: true
         tags: |
-          ghcr.io/base2services/${{ inputs.image_name }}:latest
-          ghcr.io/base2services/${{ inputs.image_name }}:${{ env.image_version }}
+          ghcr.io/base2services/${{ inputs.image-name }}:latest
+          ghcr.io/base2services/${{ inputs.image-name }}:${{ input.image-version }}
         labels: |
           runnumber=${GITHUB_RUN_ID}
           org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}
-        build-args: ${{ env.build_args }}
+        build-args: ${{ input.build-args }}
