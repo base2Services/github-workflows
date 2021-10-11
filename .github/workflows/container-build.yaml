@@ -27,8 +27,9 @@ jobs:
 
     - name: Source Version Environment File
       run: |
-        while read p; do
-          echo "$p" >> $GITHUB_ENV
+        while IFS="" read -r p || [ -n "$p" ]
+        do
+         echo "$p" >> $GITHUB_ENV
         done <${{ inputs.image_name }}/version
 
     - name: Build and push Container Image to GitHub Container Repository
