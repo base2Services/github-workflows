@@ -43,4 +43,4 @@ jobs:
         labels: |
           runnumber=${GITHUB_RUN_ID}
           org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}
-        build-args: ${{ input.build-args }}
+        build-args: ${{ inputs.build-args }}
