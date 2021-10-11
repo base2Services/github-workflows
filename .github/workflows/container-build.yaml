@@ -29,7 +29,7 @@ jobs:
       run: |
         while read p; do
           echo "$p" >> $GITHUB_ENV
-        done <${{ inputs.image_name }}/versions
+        done <${{ inputs.image_name }}/version
 
     - name: Build and push Container Image to GitHub Container Repository
       uses: docker/build-push-action@v2
